@@ -4,10 +4,10 @@ from bs4 import BeautifulSoup
 
 is_asking = True
 number_of_words = 0
-dict = {}
+words_list = []
+
 while is_asking:
     user_word = str(input("Type your word: "))
-    number_of_words += 1
     if user_word != "" and user_word != "s":
         url = requests.get(f"https://www.larousse.fr/dictionnaires/francais/{user_word}")
         french_dictionary = url.text
@@ -22,20 +22,15 @@ while is_asking:
             "Type: ": type_of_word,
             "Meaning: ": meaning_of_word
         }
-        
-        for _ in range(number_of_words):
-            dict = {key: value for (key, value) in full_word_info.items()}
-            print(dict)
-        # dict = {key: value for (key, value) in full_word_info.items()}
-        # print(dict)
-        # for _ in range(number_of_words):
-        #     print(full_word_info)
-        #     all_words = {key: value for (key, value) in full_word_info.items()}
-        #     print(all_words)
-        # data = pandas.DataFrame.from_dict(all_words, orient="index")
-        # data.to_csv("french_dict_parser/new_data.csv")
-    # print(data)
-else:
-    pass
+    
+    if user_word not in full_word_info:
+        word_dict = {key: value for (key, value) in full_word_info.items()}
+        words_list.append(word_dict)
+        print(words_list)
+        data = pandas.DataFrame(words_list)
+        data.to_csv("learned_words.csv")
+
+print(data)
+
 
 
